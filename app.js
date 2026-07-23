@@ -349,13 +349,17 @@
       '<p><strong>Evening return count</strong> — ' + esc(m ? m.name : '?') + ' · <span class="num">' + esc(day.date) + '</span></p>' +
       '<div class="progress-strip"><span class="num">' + counted + ' / ' + total + ' counted</span>' +
       '<div class="progress-bar" role="progressbar" aria-valuenow="' + counted + '" aria-valuemin="0" aria-valuemax="' + total + '" aria-label="Items counted">' +
-      '<div class="progress-fill" style="width:' + pct + '%"></div></div></div>' +
+      '<div class="progress-fill"></div></div></div>' +
       rows +
       '<div class="field-row">' +
       '<button type="button" class="btn btn-primary" data-act="finish-count">Finish count → day sheet</button>' +
       '<button type="button" class="btn btn-ghost" data-act="back-to-packed">Back</button>' +
       '</div>' +
       '<p class="hint">Untouched items are counted conservatively as fully returned (0 sold). “Sold out” sets returned to 0 in one tap.</p></div>';
+    // CSP: inline style attributes are blocked (style-src falls back to default-src 'self'),
+    // so the progress width is set via the CSSOM, which the CSP permits.
+    const fill = host.querySelector('.progress-fill');
+    if (fill) fill.style.width = pct + '%';
   }
 
   function stepReturn(day, i, delta) {
@@ -367,6 +371,21 @@
     it.counted = true;
     save();
     renderToday();
+    restoreCountFocus('[data-step="' + delta + '"][data-i="' + i + '"]');
+    announce(it.name + ': ' + next + ' of ' + it.qty + ' back.');
+  }
+
+  /* Re-rendering wipes #todayFlow, which would drop keyboard focus to <body>
+     after every stepper press. Restore focus to the same (or nearest enabled)
+     control so counting stays fully keyboard-operable. */
+  function restoreCountFocus(sel) {
+    const host = $('#todayFlow');
+    let el = host.querySelector(sel);
+    if (el && el.disabled) {
+      const item = el.closest('.count-item');
+      el = item ? item.querySelector('.stepper:not([disabled]), button:not([disabled])') : null;
+    }
+    if (el) el.focus();
   }
 
   function finishCount(day) {
@@ -512,12 +531,18 @@
     const allback = ev.target.closest('[data-allback]');
     if (step && day) { stepReturn(day, parseInt(step.dataset.i, 10), parseInt(step.dataset.step, 10)); return; }
     if (soldout && day) {
-      const it = day.items[parseInt(soldout.dataset.soldout, 10)];
-      it.returned = 0; it.counted = true; save(); renderToday(); return;
+      const i = parseInt(soldout.dataset.soldout, 10);
+      const it = day.items[i];
+      it.returned = 0; it.counted = true; save(); renderToday();
+      restoreCountFocus('[data-soldout="' + i + '"]');
+      return;
     }
     if (allback && day) {
-      const it = day.items[parseInt(allback.dataset.allback, 10)];
-      it.returned = it.qty; it.counted = true; save(); renderToday(); return;
+      const i = parseInt(allback.dataset.allback, 10);
+      const it = day.items[i];
+      it.returned = it.qty; it.counted = true; save(); renderToday();
+      restoreCountFocus('[data-allback="' + i + '"]');
+      return;
     }
     if (!actBtn) return;
     const act = actBtn.dataset.act;
@@ -528,7 +553,12 @@
       save(); renderToday(); announce('Market “' + name + '” created — now start your pack list.');
     } else if (act === 'start-day') startDay(false);
     else if (act === 'copy-last') startDay(true);
-    else if (act === 'add-row') { packDraft.push({ name: '', qtyStr: '', priceStr: '' }); renderToday(); }
+    else if (act === 'add-row') {
+      packDraft.push({ name: '', qtyStr: '', priceStr: '' });
+      renderToday();
+      const inputs = document.querySelectorAll('#todayFlow .pack-input-name');
+      if (inputs.length) inputs[inputs.length - 1].focus();
+    }
     else if (act === 'save-pack' && day) savePack(day);
     else if (act === 'edit-pack' && day) { day.status = 'packing'; packDraft = draftFromDay(day); save(); renderToday(); }
     else if (act === 'start-count' && day) { day.status = 'counting'; save(); renderToday(); }
