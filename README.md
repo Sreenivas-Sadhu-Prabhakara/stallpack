@@ -3,6 +3,8 @@
 **Pack out in the morning, count back in the evening — sold, expected cash and variance
 fall out of two counts.**
 
+![stallpack — Today view](preview.png)
+
 stallpack is a free, dependency-free web app for weekly-haat and street-market vendors,
 flea-market, craft-fair and pop-up sellers — the "craft fair inventory spreadsheet" crowd
 who hand-roll the pack → sell → return loop today. It replaces the spreadsheet with two
