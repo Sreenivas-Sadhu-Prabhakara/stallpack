@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg: #1E2630;
+    --surface: #323C49;
+    --line: #46525F;
+    --chalk: #F5F3EE;
+    --mist: #AAB4BF;
+    --awning: #D2601A;
+    --awning2: #A34710;
+    --green: #7FA98F;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    background: linear-gradient(180deg, #1a2129 0%, #1E2630 100%);
+    font-family: var(--sans);
+    color: var(--chalk);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* the scalloped stall awning — the stallpack signature */
+  .awning {
+    height: 46px;
+    background: repeating-linear-gradient(90deg, var(--awning) 0 60px, var(--awning2) 60px 120px);
+  }
+  .awning-edge {
+    height: 24px;
+    background-image: radial-gradient(circle at 50% 0, var(--awning) 66%, transparent 69%);
+    background-size: 60px 24px;
+    background-repeat: repeat-x;
+  }
+  .frame {
+    position: absolute; inset: 70px 0 0 0;
+    padding: 44px 84px 64px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 20px; }
+  .mark { width: 74px; height: 74px; border-radius: 18px; }
+  .wordmark { font-size: 60px; font-weight: 800; letter-spacing: -0.035em; }
+  .cols { display: flex; align-items: center; gap: 48px; }
+  .headline { flex: 1; }
+  .headline h1 {
+    font-size: 55px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.12;
+  }
+  .headline h1 .go { color: var(--awning); }
+  .headline p {
+    margin-top: 20px; font-size: 27px; font-weight: 500;
+    color: var(--mist); line-height: 1.35; max-width: 30ch;
+  }
+  /* the two-count tally card */
+  .tally {
+    width: 372px;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: 16px;
+    padding: 26px 30px;
+    font-variant-numeric: tabular-nums;
+    box-shadow: 0 24px 56px -30px rgba(0,0,0,0.8);
+  }
+  .tally .trow {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 9px 0; border-bottom: 1px solid var(--line);
+    font-size: 25px; font-weight: 600; color: var(--mist);
+  }
+  .tally .trow strong { color: var(--chalk); font-weight: 800; font-size: 27px; }
+  .tally .trow.total { border-bottom: none; padding-top: 14px; }
+  .tally .verdict {
+    margin-top: 10px;
+    background: #4A3325;
+    border: 2px solid var(--awning);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 25px; font-weight: 800; color: #F0A26B;
+  }
+  .chips { display: flex; gap: 13px; }
+  .chip {
+    border: 1.5px solid var(--line);
+    background: rgba(50,60,73,0.55);
+    border-radius: 999px;
+    padding: 11px 21px;
+    font-size: 22px; font-weight: 650; color: var(--mist);
+  }
+</style>
+</head>
+<body>
+  <div class="awning"></div>
+  <div class="awning-edge"></div>
+
+  <div class="frame">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="7" fill="#28313D"/>
+        <path d="M5 6h22v5a3.67 3.67 0 0 1-7.33 0 3.67 3.67 0 0 1-7.34 0A3.67 3.67 0 0 1 5 11z" fill="#D2601A"/>
+        <g stroke="#F5F3EE" stroke-width="2" stroke-linecap="round">
+          <path d="M10 18v8"/><path d="M14 18v8"/><path d="M18 18v8"/><path d="M22 18v8"/>
+          <path d="M8 25.5 24 18.5"/>
+        </g>
+      </svg>
+      <span class="wordmark">stallpack</span>
+    </div>
+
+    <div class="cols">
+      <div class="headline">
+        <h1>Pack out. Count back.<br><span class="go">The day reconciles itself.</span></h1>
+        <p>Market stall &amp; craft fair inventory — sold, expected cash and variance from two counts.</p>
+      </div>
+      <div class="tally" aria-hidden="true">
+        <div class="trow"><span>Carried out</span><strong>30</strong></div>
+        <div class="trow"><span>Came back</span><strong>12</strong></div>
+        <div class="trow"><span>Sold</span><strong>18</strong></div>
+        <div class="trow total"><span>Expected</span><strong>₹2,700.00</strong></div>
+        <div class="trow"><span>Cash + UPI</span><strong>₹2,560.00</strong></div>
+        <div class="verdict">▼ short ₹140.00</div>
+      </div>
+    </div>
+
+    <div class="chips">
+      <span class="chip">two counts, no POS</span>
+      <span class="chip">exact paise</span>
+      <span class="chip">printable</span>
+      <span class="chip">offline &amp; private</span>
+    </div>
+  </div>
+</body>
+</html>

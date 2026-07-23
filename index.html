@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'">
+  <title>stallpack — market stall &amp; craft fair inventory tracker</title>
+  <meta name="description" content="Market stall inventory tracker: pack out in the morning, count back in the evening — sold units, expected cash and variance fall out of two counts. Private, offline, printable.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="canonical" href="https://sreenivas-sadhu-prabhakara.github.io/stallpack/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="Sreenivas Sadhu Prabhakara">
+  <meta name="keywords" content="market stall inventory tracker, craft fair inventory spreadsheet, flea market inventory, haat vendor app, street market seller, pack list, cash reconciliation, sell-through, stall stock count, pop-up shop inventory">
+  <meta name="theme-color" content="#1E2630" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="stallpack">
+  <meta property="og:title" content="stallpack — market stall &amp; craft fair inventory tracker">
+  <meta property="og:description" content="Pack out in the morning, count back in the evening — sold, expected cash and variance fall out of two counts. Private, offline, printable.">
+  <meta property="og:url" content="https://sreenivas-sadhu-prabhakara.github.io/stallpack/">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:image" content="https://sreenivas-sadhu-prabhakara.github.io/stallpack/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="stallpack — pack out, count back, reconcile the cash">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="stallpack — market stall &amp; craft fair inventory tracker">
+  <meta name="twitter:description" content="Pack out in the morning, count back in the evening — sold, expected cash and variance fall out of two counts. Private, offline, printable.">
+  <meta name="twitter:image" content="https://sreenivas-sadhu-prabhakara.github.io/stallpack/og-image.png">
+  <meta name="twitter:image:alt" content="stallpack — pack out, count back, reconcile the cash">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- Structured data (data blocks; not executable script) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "stallpack",
+    "description": "Market stall and craft fair inventory tracker. Pack out in the morning, count back in the evening — sold units, expected takings and cash variance fall out of two physical counts. Works fully offline; all data stays in your browser.",
+    "url": "https://sreenivas-sadhu-prabhakara.github.io/stallpack/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any (modern web browser)",
+    "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+    "license": "https://opensource.org/licenses/MIT",
+    "author": { "@type": "Person", "name": "Sreenivas Sadhu Prabhakara" },
+    "softwareVersion": "0.1.0",
+    "featureList": [
+      "Morning pack list with copy-last-day pre-fill per market",
+      "90-second evening return count with big steppers and one-tap sold out",
+      "Day sheet: sold, expected takings and variance in exact integer paise",
+      "Per-market history with sell-through % and best-day pack suggestion",
+      "Printable pack checklist and day sheet; RFC 4180 CSV export",
+      "Indian digit grouping (₹1,23,456.75) with $/€/£ display option",
+      "100% offline — data never leaves the browser (localStorage only)"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does this market stall inventory tracker work offline, and where does my sales data go?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "stallpack runs entirely in your browser and works with no internet at all — useful at an open-air market. Your items, prices and cash figures are saved only in this browser's localStorage; the page's security policy blocks every network request, so the browser itself prevents any data from being sent anywhere."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I reconcile cash at a craft fair or weekly market stall?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Two physical counts: list what you carry out in the morning (item, quantity, unit price), then count what came back in the evening. Sold = carried − returned, expected takings = sum of sold × list price, and variance = what you actually hold (cash + digital payments) minus expected. stallpack does this arithmetic in exact paise and prints a checklist and day sheet."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can stallpack tell me if money was stolen from my stall?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, and it says so on the day sheet. Variance is pure arithmetic against list prices — discounts, haggling, freebies, breakage, miscounts and loss all look identical in the number. A negative variance means less money than list price would predict, nothing more. It is not theft detection."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the suggested pack quantity work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It is a plain history lookup: your best day sold N of that item at that specific market, so N is suggested the next time that market comes around. It is not demand forecasting and there is no AI involved."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the app</a>
+
+  <header class="hero">
+    <div class="awning" aria-hidden="true"><div class="awning-edge"></div></div>
+    <div class="hero-inner">
+      <div class="brand" aria-hidden="true">
+        <svg class="brand-mark" viewBox="0 0 32 32" role="presentation">
+          <rect width="32" height="32" rx="7" fill="#1E2630"/>
+          <path d="M5 6h22v5a3.67 3.67 0 0 1-7.33 0 3.67 3.67 0 0 1-7.34 0A3.67 3.67 0 0 1 5 11z" fill="#D2601A"/>
+          <g stroke="#F5F3EE" stroke-width="2" stroke-linecap="round">
+            <path d="M10 18v8"/><path d="M14 18v8"/><path d="M18 18v8"/><path d="M22 18v8"/>
+            <path d="M8 25.5 24 18.5"/>
+          </g>
+        </svg>
+        <span class="brand-name">stallpack</span>
+      </div>
+      <h1>Market stall &amp; craft fair inventory tracker — pack out, count back, reconcile the cash</h1>
+      <p class="lede">
+        Two physical counts are all it takes: list what you carry out in the morning, count what
+        came back in the evening. Sold units, expected takings and the cash variance fall out —
+        in exact paise. <strong>Your data never leaves this browser.</strong>
+      </p>
+      <ul class="hero-chips" role="list">
+        <li>two counts, no POS</li>
+        <li>works fully offline</li>
+        <li>printable checklist &amp; day sheet</li>
+        <li>CSV export</li>
+      </ul>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Sections">
+    <button type="button" class="tab" id="tab-today" data-tab="today" aria-controls="panel-today">Today</button>
+    <button type="button" class="tab" id="tab-history" data-tab="history" aria-controls="panel-history">History</button>
+    <button type="button" class="tab" id="tab-markets" data-tab="markets" aria-controls="panel-markets">Markets</button>
+    <button type="button" class="tab" id="tab-settings" data-tab="settings" aria-controls="panel-settings">Settings</button>
+  </nav>
+
+  <main id="main">
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <div id="nag" class="nag" hidden>
+      <p><strong>Backup reminder:</strong> <span id="nagText"></span> All history lives only in this
+      browser — clearing site data or switching devices loses it.</p>
+      <div class="nag-actions">
+        <button type="button" id="nagExport" class="btn btn-primary">Export CSV now</button>
+        <button type="button" id="nagLater" class="btn btn-ghost">Later</button>
+      </div>
+    </div>
+
+    <section id="panel-today" class="panel" role="region" aria-labelledby="tab-today">
+      <h2 class="section-title"><span class="scallop-divider" aria-hidden="true"></span>Today's market day</h2>
+      <div id="todayFlow"></div>
+    </section>
+
+    <section id="panel-history" class="panel" role="region" aria-labelledby="tab-history" hidden>
+      <h2 class="section-title"><span class="scallop-divider" aria-hidden="true"></span>History</h2>
+      <div class="field-row">
+        <label for="historyMarket">Market</label>
+        <select id="historyMarket"></select>
+        <button type="button" id="exportCsv" class="btn btn-secondary">Export all days (CSV)</button>
+      </div>
+      <div id="historyBody"></div>
+    </section>
+
+    <section id="panel-markets" class="panel" role="region" aria-labelledby="tab-markets" hidden>
+      <h2 class="section-title"><span class="scallop-divider" aria-hidden="true"></span>Markets directory</h2>
+      <p class="hint">Name your recurring markets — e.g. “Tuesday haat”, “Sunday craft fair”. Every day
+      record is tagged to one market, so history compares like with like.</p>
+      <form id="marketForm" class="field-row">
+        <label for="marketName">New market</label>
+        <input type="text" id="marketName" maxlength="60" placeholder="e.g. Tuesday haat" autocomplete="off" required>
+        <button type="submit" class="btn btn-primary">Add market</button>
+      </form>
+      <ul id="marketList" class="market-list" role="list"></ul>
+    </section>
+
+    <section id="panel-settings" class="panel" role="region" aria-labelledby="tab-settings" hidden>
+      <h2 class="section-title"><span class="scallop-divider" aria-hidden="true"></span>Settings</h2>
+      <div class="field-row">
+        <label for="setSymbol">Currency symbol (display only)</label>
+        <select id="setSymbol">
+          <option value="₹">₹ rupee</option>
+          <option value="$">$ dollar</option>
+          <option value="€">€ euro</option>
+          <option value="£">£ pound</option>
+        </select>
+      </div>
+      <p class="hint">The symbol changes nothing in the maths — all amounts are stored and computed in
+      integer minor units (paise/cents). ₹ uses Indian digit grouping (₹1,23,456.75); $, € and £ use
+      1,000-grouping.</p>
+      <div class="field-row">
+        <label for="setGrouping">Digit grouping</label>
+        <select id="setGrouping">
+          <option value="auto">Auto (₹ → Indian, others → plain)</option>
+          <option value="in">Indian (1,23,456)</option>
+          <option value="plain">Plain (123,456)</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label for="setTheme">Theme</label>
+        <select id="setTheme">
+          <option value="auto">Match device</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </div>
+      <h3>Your data</h3>
+      <p class="hint">Everything is stored in this browser's localStorage under the key
+      <code>stallpack.v1</code>. Nothing is ever uploaded — the page's security policy blocks all
+      network requests. CSV export is the only way data leaves, and you trigger it.</p>
+      <div class="field-row">
+        <button type="button" id="exportCsv2" class="btn btn-secondary">Export all days (CSV)</button>
+        <button type="button" id="wipeData" class="btn btn-danger">Erase all stallpack data…</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- print-only areas, filled by app.js just before window.print() -->
+  <div id="printPack" class="print-area" aria-hidden="true"></div>
+  <div id="printSheet" class="print-area" aria-hidden="true"></div>
+
+  <footer class="footer">
+    <div class="scallop-divider" aria-hidden="true"></div>
+    <h2>Honest limits</h2>
+    <ul>
+      <li>The reconciliation is only as good as your two physical counts — a miscount at either end
+      shows up as variance, and stallpack cannot tell which count was wrong.</li>
+      <li>Variance is pure arithmetic (actual takings − expected at list price). Discounts, haggling,
+      freebies, breakage, miscounts and theft are indistinguishable in it. <strong>This is not theft
+      detection</strong>, and the verdict never accuses anyone.</li>
+      <li>Expected cash assumes list prices. If you routinely haggle, expected will overstate and
+      variance will run negative — that is a feature to see, not an error.</li>
+      <li>All data lives in this browser's localStorage only. Clearing site data or switching devices
+      loses history — export CSV regularly (the app reminds you every 5 saved days).</li>
+      <li>Pack suggestions are “your best day sold N at this market” — a simple history lookup, not
+      demand forecasting.</li>
+    </ul>
+    <p class="disclaimer"><strong>Disclaimer:</strong> stallpack is a free record-keeping aid provided
+    “as is”, without warranty of any kind. It is not accounting, tax, or professional business advice,
+    and its figures are only as accurate as the counts and amounts you enter. Verify important numbers
+    yourself. The author accepts no liability for decisions made using this tool. Open source under the
+    MIT license.</p>
+    <p class="footer-meta">stallpack · © 2026 Sreenivas Sadhu Prabhakara · MIT license · no accounts,
+    no analytics, no network — your data never leaves this browser.</p>
+  </footer>
+
+  <script src="data/engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
