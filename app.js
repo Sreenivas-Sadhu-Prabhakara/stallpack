@@ -104,7 +104,8 @@
       const btn = document.getElementById('tab-' + t);
       const panel = document.getElementById('panel-' + t);
       const on = t === name;
-      btn.setAttribute('aria-selected', String(on));
+      if (on) btn.setAttribute('aria-current', 'true');
+      else btn.removeAttribute('aria-current');
       panel.hidden = !on;
     }
     if (name === 'today') renderToday();

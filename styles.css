@@ -42,7 +42,7 @@
   --ok-text: #9CC4AC;
   --warn-bg: #4A3325;
   --warn-text: #F0A26B;
-  --danger: #E2705F;
+  --danger: #F49B89;
   --focus: #7DB3E8;
   --shadow: 0 10px 28px -18px rgba(0, 0, 0, 0.7);
 }
@@ -64,7 +64,7 @@
     --ok-text: #9CC4AC;
     --warn-bg: #4A3325;
     --warn-text: #F0A26B;
-    --danger: #E2705F;
+    --danger: #F49B89;
     --focus: #7DB3E8;
     --shadow: 0 10px 28px -18px rgba(0, 0, 0, 0.7);
   }
@@ -193,7 +193,7 @@ h1 {
   padding: 0.55rem 0.9rem;
   cursor: pointer;
 }
-.tab[aria-selected="true"] {
+.tab[aria-current="true"] {
   color: var(--accent-text);
   border-bottom-color: var(--awning);
 }
